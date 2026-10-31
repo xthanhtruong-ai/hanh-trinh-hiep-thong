@@ -1,0 +1,10 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.har
+download.devtools
+extracted_game/
+npm-debug.log*
+.DS_Store
+coverage/
