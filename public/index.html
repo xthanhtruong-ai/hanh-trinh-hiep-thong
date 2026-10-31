@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1723">
+  <title>Hành Trình 27 · Cờ tỷ phú</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Hành Trình 27">
+        <span class="brand-mark">✦</span>
+        <span><strong>HÀNH TRÌNH <em>27</em></strong><small>Vòng quanh các giáo phận Việt Nam</small></span>
+      </a>
+      <div id="connection" class="connection"><i></i> Chưa vào phòng</div>
+    </header>
+
+    <section id="lobby" class="lobby">
+      <div class="hero">
+        <span class="eyebrow">CÙNG GIEO XÚC XẮC · CÙNG KHÁM PHÁ</span>
+        <h1>Một vòng quanh <span>27 giáo phận</span></h1>
+        <p>Gặp gỡ, xây dựng và kết nối qua một bàn cờ tỷ phú trực tuyến.</p>
+        <div class="hero-stats"><span>45 ô trên bàn</span><span>2–8 người chơi</span><span>Phòng riêng bằng mã</span></div>
+      </div>
+      <div class="lobby-card">
+        <label for="playerName">Tên người chơi</label>
+        <input id="playerName" maxlength="18" placeholder="Nhập tên của bạn" autocomplete="nickname">
+        <button id="createRoom" class="primary full">＋ Tạo phòng mới</button>
+        <div class="divider"><span>hoặc vào phòng có sẵn</span></div>
+        <div class="join-row"><input id="roomCode" maxlength="6" placeholder="MÃ PHÒNG" autocomplete="off"><button id="joinRoom" class="secondary">Tham gia</button></div>
+        <p id="lobbyError" class="error" role="status"></p>
+      </div>
+      <div class="lobby-foot">Luật mua bán, tiền thuê, xúc xắc, nhà và khách sạn theo lối chơi Cờ tỷ phú quen thuộc.</div>
+    </section>
+
+    <section id="game" class="game hidden">
+      <div class="game-heading">
+        <div><span class="eyebrow">PHÒNG TRỰC TUYẾN</span><h2 id="gameTitle">Bàn chơi</h2></div>
+        <div class="room-share"><span>MÃ PHÒNG</span><strong id="roomCodeLabel">------</strong><button id="copyRoom" title="Sao chép liên kết">⧉</button></div>
+      </div>
+
+      <div class="game-layout">
+        <div class="board-wrap">
+          <div id="board" class="board" aria-label="Bàn cờ 45 ô">
+            <div id="side-top" class="side side-top"></div>
+            <div id="side-right" class="side side-right"></div>
+            <div id="side-bottom" class="side side-bottom"></div>
+            <div id="side-left" class="side side-left"></div>
+            <section class="board-center">
+              <div class="center-sun">✦</div>
+              <p class="eyebrow">HÀNH TRÌNH</p>
+              <h3>27 giáo phận</h3>
+              <div class="dice-box"><span id="dieOne">⚀</span><span id="dieTwo">⚀</span></div>
+              <p id="turnStatus" class="turn-status">Chờ người chơi…</p>
+              <div id="actionPanel" class="action-panel"></div>
+            </section>
+          </div>
+        </div>
+
+        <aside class="sidebar">
+          <section class="panel players-panel"><div class="panel-title"><h3>Người chơi</h3><span id="playerCount">0/8</span></div><div id="players" class="players"></div><button id="startGame" class="primary full hidden">Bắt đầu ván</button></section>
+          <section class="panel"><div class="panel-title"><h3>Sự kiện</h3><span class="live-pill">LIVE</span></div><div id="eventLog" class="event-log"></div></section>
+          <p class="rules-note">Chủ phòng hãy mời ít nhất một người nữa bằng mã phòng. Mỗi lượt chỉ người đang đến lượt mới gieo xúc xắc.</p>
+        </aside>
+      </div>
+      <p id="gameError" class="error game-error" role="status"></p>
+    </section>
+
+    <footer class="footer"><span>HÀNH TRÌNH 27</span><span>Một trò chơi cộng đồng</span></footer>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
