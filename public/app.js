@@ -18,6 +18,10 @@ const movingPlayers = new Set();
 let activeHelpTile = null;
 let helpCloseTimer = null;
 
+setInterval(() => {
+  if (session) fetch('/health', { cache: 'no-store' }).catch(() => {});
+}, 5 * 60 * 1000);
+
 const tileIcons = {
   property: 'church', start: 'cross-sun', chest: 'charity', chance: 'event-card',
   tax: 'mission-coin', railroad: 'pilgrim-route', utility: 'mission-center',

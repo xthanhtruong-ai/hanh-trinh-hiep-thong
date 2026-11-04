@@ -11,7 +11,16 @@ Một trò chơi cờ tỷ phú trực tuyến về truyền giáo và gây dự
 
 ## Chạy trực tuyến
 
-Ứng dụng cần được đưa lên một máy chủ có thể truy cập từ Internet. Máy chủ phục vụ giao diện, giữ trạng thái phòng trong bộ nhớ và đồng bộ lượt chơi qua Server-Sent Events. Các phòng sẽ mất khi máy chủ khởi động lại; bản hiện tại chưa có tài khoản hoặc cơ sở dữ liệu lưu ván.
+Ứng dụng cần chạy trên máy chủ Node.js để phục vụ giao diện, giữ trạng thái phòng và đồng bộ lượt chơi qua Server-Sent Events. Repo đã có cấu hình Render trong `render.yaml`.
+
+### Triển khai lên Render
+
+1. Đăng nhập hoặc tạo tài khoản Render, rồi mở [tạo Blueprint mới](https://dashboard.render.com/select-repo?type=iac).
+2. Kết nối GitHub nếu Render yêu cầu, chọn repo `xthanhtruong-ai/hanh-trinh-hiep-thong` và nhánh `main`.
+3. Kiểm tra Blueprint dùng dịch vụ web Node.js, vùng Singapore và gói Free; chọn **Deploy Blueprint**.
+4. Sau khi triển khai hoàn tất, mở URL `onrender.com` của dịch vụ để chơi và chia sẻ liên kết phòng.
+
+Render sẽ tự triển khai các commit mới trên nhánh `main`. Khi người chơi đã vào phòng, trình duyệt gửi health check định kỳ để giữ dịch vụ hoạt động trong lúc chờ lượt. Nếu không có người kết nối, gói Free có thể tạm ngừng dịch vụ sau 15 phút không có lưu lượng và cần khoảng một phút để khởi động lại. Trạng thái phòng hiện chỉ lưu trong bộ nhớ, nên phòng đang chơi sẽ mất nếu máy chủ khởi động lại hoặc triển khai phiên bản mới. [Chi tiết giới hạn gói Free](https://render.com/docs/free).
 
 ## Luật và nội dung
 
