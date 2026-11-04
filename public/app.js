@@ -12,6 +12,7 @@ let playersExpanded = true;
 let eventsExpanded = false;
 let lastChatMessageId = null;
 let lastDisplayedRollSequence = null;
+let chatOpen = false;
 const displayedPositions = new Map();
 const movementRuns = new Map();
 const movingPlayers = new Set();
@@ -96,24 +97,17 @@ function positionTileTooltip(tileElement) {
 
 function openTileHelp(tileElement) {
   clearTimeout(helpCloseTimer);
-  if (activeHelpTile && activeHelpTile !== tileElement) {
-    activeHelpTile.classList.remove('help-open');
-    activeHelpTile.querySelector('.tile-help')?.setAttribute('aria-expanded', 'false');
-  }
+  if (activeHelpTile && activeHelpTile !== tileElement) activeHelpTile.classList.remove('help-open');
   activeHelpTile = tileElement;
   tileElement.classList.add('help-open');
-  tileElement.querySelector('.tile-help')?.setAttribute('aria-expanded', 'true');
   requestAnimationFrame(() => positionTileTooltip(tileElement));
 }
 
 function scheduleCloseTileHelp(tileElement) {
   clearTimeout(helpCloseTimer);
   helpCloseTimer = setTimeout(() => {
-    const helpButton = tileElement.querySelector('.tile-help');
-    const tooltip = tileElement.querySelector('.tile-tooltip');
-    if (helpButton?.matches(':hover, :focus-visible') || tooltip?.matches(':hover')) return;
+    if (tileElement.matches(':hover, :focus-within')) return;
     tileElement.classList.remove('help-open');
-    tileElement.querySelector('.tile-help')?.setAttribute('aria-expanded', 'false');
     if (activeHelpTile === tileElement) activeHelpTile = null;
   }, 140);
 }
@@ -227,10 +221,10 @@ function renderBoard() {
   activeHelpTile?.classList.remove('help-open');
   activeHelpTile = null;
   const lanes = [
-    { side: $('#side-bottom'), indexes: Array.from({ length: 13 }, (_, i) => 12 - i) },
-    { side: $('#side-left'), indexes: Array.from({ length: 11 }, (_, i) => 13 + i) },
-    { side: $('#side-top'), indexes: Array.from({ length: 11 }, (_, i) => 24 + i) },
-    { side: $('#side-right'), indexes: Array.from({ length: 10 }, (_, i) => 35 + i) }
+    { side: $('#side-bottom'), indexes: Array.from({ length: 11 }, (_, i) => 10 - i) },
+    { side: $('#side-left'), indexes: Array.from({ length: 12 }, (_, i) => 11 + i) },
+    { side: $('#side-top'), indexes: Array.from({ length: 11 }, (_, i) => 23 + i) },
+    { side: $('#side-right'), indexes: Array.from({ length: 11 }, (_, i) => 34 + i) }
   ];
   for (const lane of lanes) {
     lane.side.replaceChildren();
@@ -251,18 +245,19 @@ function renderBoard() {
       const focusPlayer = state.players.find(player => player.id === focusedPlayerId);
       const focusPosition = focusPlayer ? displayedPositions.get(focusPlayer.id) ?? focusPlayer.position : -1;
       if (movingPlayers.has(focusedPlayerId) && focusPosition === tile.index) element.classList.add('is-focus');
-      const playersHere = state.players.filter(player => !player.bankrupt && (displayedPositions.get(player.id) ?? player.position) === tile.index).map(player => '<i class="token-dot' + (movingPlayers.has(player.id) ? ' moving' : '') + (player.id === focusedPlayerId ? ' focused' : '') + '" style="--player-color:' + player.color + '" title="' + escapeHtml(player.name) + '">' + escapeHtml(player.name.slice(0, 1).toUpperCase()) + '</i>').join('');
-      const help = tile.kind === 'property' ? '' : '<button class="tile-help" type="button" aria-label="Giải thích ô ' + escapeHtml(title) + '" aria-describedby="tile-help-' + tile.index + '">!</button><span class="tile-tooltip" id="tile-help-' + tile.index + '" role="tooltip">' + escapeHtml(tileHelpText(tile)) + '</span>';
-      element.innerHTML = '<span class="tile-color-band" aria-hidden="true"></span><span class="tile-icon">' + assetIcon(tileIcons[tile.kind] || 'church') + '</span><span class="tile-content"><span class="tile-name">' + escapeHtml(title) + '</span>' + stateLine + level + '</span>' + help + benefactorMarker + '<span class="tokens">' + playersHere + '</span>';
+      const playersHere = state.players.filter(player => !player.bankrupt && (displayedPositions.get(player.id) ?? player.position) === tile.index).map(player => '<i class="token-dot' + (movingPlayers.has(player.id) ? ' moving' : '') + (player.id === focusedPlayerId ? ' focused' : '') + '" role="img" aria-label="' + escapeHtml(player.name) + '" style="--player-color:' + player.color + '" title="' + escapeHtml(player.name) + '">' + escapeHtml(player.name.slice(0, 1).toUpperCase()) + '</i>').join('');
+      const hasHelp = tile.kind !== 'property';
+      const help = hasHelp ? '<span class="tile-tooltip" id="tile-help-' + tile.index + '" role="tooltip">' + escapeHtml(tileHelpText(tile)) + '</span>' : '';
+      if (hasHelp) {
+        element.tabIndex = 0;
+        element.setAttribute('aria-describedby', 'tile-help-' + tile.index);
+      }
+      element.innerHTML = '<span class="tile-color-band"><span class="tokens" role="group" aria-label="Người chơi tại ô">' + playersHere + '</span></span><span class="tile-icon">' + assetIcon(tileIcons[tile.kind] || 'church') + '</span><span class="tile-content"><span class="tile-name">' + escapeHtml(title) + '</span>' + stateLine + level + '</span>' + help + benefactorMarker;
       if (tile.kind !== 'property') {
-        const helpButton = element.querySelector('.tile-help');
-        const tooltip = element.querySelector('.tile-tooltip');
-        helpButton.addEventListener('pointerenter', () => openTileHelp(element));
-        helpButton.addEventListener('pointerleave', () => scheduleCloseTileHelp(element));
-        helpButton.addEventListener('focus', () => openTileHelp(element));
-        helpButton.addEventListener('blur', () => scheduleCloseTileHelp(element));
-        tooltip.addEventListener('pointerenter', () => openTileHelp(element));
-        tooltip.addEventListener('pointerleave', () => scheduleCloseTileHelp(element));
+        element.addEventListener('pointerenter', () => openTileHelp(element));
+        element.addEventListener('pointerleave', () => scheduleCloseTileHelp(element));
+        element.addEventListener('focus', () => openTileHelp(element));
+        element.addEventListener('blur', () => scheduleCloseTileHelp(element));
       }
       if (state.pendingTile === tile.index) element.classList.add('is-current');
       lane.side.append(element);
@@ -320,12 +315,6 @@ function actionMarkup() {
   const me = state.players.find(player => player.id === session.playerId);
   const active = state.players.find(player => player.id === state.currentPlayerId);
   if (state.phase === 'finished') return dialogMarkup('Hành trình đã khép lại', '<p class="winner">🏆 ' + escapeHtml(state.players.find(player => player.id === state.winnerId)?.name || 'Người chơi') + ' chiến thắng!</p>');
-  if (state.phase === 'auction') {
-    const auction = state.auction;
-    if (auction.currentBidderId !== session.playerId) return '';
-    const tile = state.board[auction.tileIndex];
-    return dialogMarkup('Mời cộng đoàn đóng góp', '<p>Đề nghị mức đóng góp tại <strong>' + escapeHtml(tile.kind === 'property' ? dioceseTitle(tile.name) : tile.name) + '</strong><br>Điểm sứ vụ hiện tại: ' + currency(auction.bid) + '</p><div class="bid-row"><input id="bidAmount" type="number" min="' + (auction.bid + 10) + '" step="10" value="' + (auction.bid + 10) + '"><button class="primary" data-action="bid">Góp điểm sứ vụ</button>' + button('Nhường lượt', 'passBid') + '</div>');
-  }
   if (state.phase === 'shortfall') {
     const shortfall = state.shortfall;
     if (shortfall.playerId !== session.playerId) return '';
@@ -342,7 +331,7 @@ function actionMarkup() {
     const price = tile.kind === 'property' ? tile.price : tile.kind === 'railroad' ? 200 : 150;
     const place = tile.kind === 'property' ? dioceseTitle(tile.name) : tile.name;
     const isDiocese = tile.kind === 'property';
-    return dialogMarkup(isDiocese ? 'Xây nhà thờ đầu tiên' : 'Đồng hành cùng sứ vụ', '<p>Đóng góp ' + currency(price) + (isDiocese ? ' để trở thành ân nhân và xây nhà thờ đầu tiên tại ' : ' để trở thành ân nhân cùng ') + '<strong>' + escapeHtml(place) + '</strong>.</p>' + button(isDiocese ? 'Đóng góp và xây nhà thờ' : 'Đóng góp điểm sứ vụ', 'contribute', 'primary') + button('Mời cộng đoàn đóng góp', 'decline'));
+    return dialogMarkup(isDiocese ? 'Xây nhà thờ đầu tiên' : 'Đồng hành cùng sứ vụ', '<p>Đóng góp ' + currency(price) + (isDiocese ? ' để trở thành ân nhân và xây nhà thờ đầu tiên tại ' : ' để trở thành ân nhân cùng ') + '<strong>' + escapeHtml(place) + '</strong>.</p>' + button(isDiocese ? 'Đóng góp và xây nhà thờ' : 'Đóng góp điểm sứ vụ', 'contribute', 'primary') + button(isDiocese ? 'Không xây lần này' : 'Không đóng góp lần này', 'decline'));
   }
   const tile = state.pendingTile === null ? null : state.board[state.pendingTile];
   const buildChoice = buildChurchChoice(me, tile);
@@ -372,10 +361,6 @@ function activityStatus() {
     const tile = state.board[state.pendingTile];
     return active.name + ' đang cân nhắc đóng góp tại ' + (tile?.kind === 'property' ? dioceseTitle(tile.name) : tile?.name || 'điểm dừng') + '.';
   }
-  if (state.phase === 'auction') {
-    const bidder = state.players.find(player => player.id === state.auction?.currentBidderId);
-    return bidder ? bidder.name + ' đang đề nghị mức đóng góp.' : 'Cộng đoàn đang hoàn tất lượt đóng góp.';
-  }
   if (state.phase === 'shortfall') return active.name + ' đang thiếu điểm sứ vụ để tiếp tục.';
   const tile = state.pendingTile === null ? null : state.board[state.pendingTile];
   if (tile?.kind === 'property') {
@@ -404,6 +389,10 @@ function render() {
   game.classList.toggle('in-lobby', inLobby);
   game.classList.toggle('players-collapsed', state.started && !playersExpanded);
   game.classList.toggle('events-expanded', state.started && eventsExpanded);
+  game.classList.toggle('events-open', state.started && eventsExpanded);
+  $('#chatPanel').classList.toggle('hidden', !chatOpen);
+  $('#chatToggleButton').setAttribute('aria-expanded', String(chatOpen));
+  $('#chatToggleButton').setAttribute('aria-label', chatOpen ? 'Đóng tin nhắn' : 'Mở tin nhắn');
   $('#roomCodeLabel').textContent = state.code;
   $('#lobbyRoomCode').textContent = state.code;
   $('.players-strip .panel-title h3').textContent = inLobby ? 'Phòng công khai' : 'Cộng đoàn người chơi';
@@ -418,7 +407,7 @@ function render() {
   $('#eventsArrow').classList.toggle('is-expanded', eventsExpanded);
   $('#startGame').classList.toggle('hidden', state.started || state.hostId !== session.playerId);
   $('#startGame').disabled = state.players.length < 2;
-  const highlightedPlayerId = state.phase === 'auction' ? state.auction?.currentBidderId : state.currentPlayerId;
+  const highlightedPlayerId = state.currentPlayerId;
   const orderedPlayers = [...state.players].sort((a, b) => a.id === state.hostId ? -1 : b.id === state.hostId ? 1 : 0);
   $('#players').innerHTML = orderedPlayers.map(player => {
     const active = player.id === highlightedPlayerId && state.started && state.phase !== 'finished';
@@ -444,8 +433,7 @@ function render() {
   if (latestChatMessageId !== lastChatMessageId) $('#chatMessages').scrollTop = $('#chatMessages').scrollHeight;
   lastChatMessageId = latestChatMessageId;
   const activePlayer = state.players.find(player => player.id === state.currentPlayerId);
-  const auctionBidder = state.phase === 'auction' ? state.players.find(player => player.id === state.auction?.currentBidderId) : null;
-  $('#turnStatus').textContent = auctionBidder ? 'Đang góp điểm: ' + auctionBidder.name : state.started ? (activePlayer ? 'Lượt của ' + activePlayer.name : 'Ván chơi đã kết thúc') : 'Chờ người chơi…';
+  $('#turnStatus').textContent = state.started ? (activePlayer ? 'Lượt của ' + activePlayer.name : 'Ván chơi đã kết thúc') : 'Chờ người chơi…';
   const rollDice = $('#rollDice');
   const canRoll = state.started && state.phase === 'roll' && state.currentPlayerId === session.playerId && activeAnimations === 0 && !rollInProgress;
   rollDice.disabled = !canRoll;
@@ -519,7 +507,6 @@ $('#actionDialogContent').addEventListener('click', async event => {
   const target = event.target.closest('[data-action]');
   if (!target) return;
   const spec = target.dataset.action;
-  if (spec === 'bid') return sendAction('bid', { amount: $('#bidAmount').value });
   const separator = spec.indexOf(':');
   if (separator >= 0) return sendAction(spec.slice(0, separator), { propertyId: spec.slice(separator + 1) });
   sendAction(spec);
@@ -536,9 +523,25 @@ $('#playersMenuButton').addEventListener('click', () => {
 $('#eventsMenuButton').addEventListener('click', () => {
   eventsExpanded = !eventsExpanded;
   $('#game').classList.toggle('events-expanded', eventsExpanded);
+  $('#game').classList.toggle('events-open', eventsExpanded);
   $('#eventsMenuButton').setAttribute('aria-expanded', String(eventsExpanded));
   $('#eventsMenuButton').setAttribute('aria-label', eventsExpanded ? 'Thu gọn lịch sử hoạt động' : 'Mở lịch sử hoạt động');
   $('#eventsArrow').classList.toggle('is-expanded', eventsExpanded);
+});
+
+function setChatOpen(open) {
+  chatOpen = open;
+  $('#chatPanel').classList.toggle('hidden', !chatOpen);
+  $('#chatToggleButton').setAttribute('aria-expanded', String(chatOpen));
+  $('#chatToggleButton').setAttribute('aria-label', chatOpen ? 'Đóng tin nhắn' : 'Mở tin nhắn');
+  if (chatOpen) requestAnimationFrame(() => $('#chatInput').focus());
+  else $('#chatToggleButton').focus();
+}
+
+$('#chatToggleButton').addEventListener('click', () => setChatOpen(!chatOpen));
+$('#closeChatButton').addEventListener('click', () => setChatOpen(false));
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && chatOpen) setChatOpen(false);
 });
 
 $('#chatForm').addEventListener('submit', async event => {
@@ -634,6 +637,7 @@ $('#leaveRoom').addEventListener('click', async () => {
     state = null;
     playersExpanded = true;
     eventsExpanded = false;
+    chatOpen = false;
     lastChatMessageId = null;
     lastDisplayedRollSequence = null;
     rollInProgress = false;

@@ -64,6 +64,15 @@
                 <div id="actionDialog" class="action-dialog hidden" aria-live="polite"><section id="actionDialogContent" class="action-dialog-card"></section></div>
               </section>
             </div>
+            <section id="chatPanel" class="chat-panel panel hidden" aria-label="Tin nhắn giữa người chơi">
+              <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
+              <p id="chatError" class="chat-error hidden" role="status"></p>
+              <form id="chatForm" class="chat-form">
+                <input id="chatInput" maxlength="300" placeholder="Nhắn tin cho cộng đoàn…" autocomplete="off" aria-label="Tin nhắn">
+                <button class="primary" type="submit">Gửi</button>
+              </form>
+              <button id="closeChatButton" class="chat-close-action" type="button">Đóng</button>
+            </section>
           </div>
         </div>
 
@@ -75,16 +84,6 @@
             </div>
             <div class="activity-history-label"><span>LỊCH SỬ HOẠT ĐỘNG</span><b id="eventsMenuCount">0</b></div>
             <div id="eventLog" class="event-log"></div>
-          </section>
-
-          <section class="chat-panel panel" aria-labelledby="chatTitle">
-            <div class="chat-header"><h3 id="chatTitle">Tin nhắn giữa người chơi</h3><span>💬</span></div>
-            <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
-            <form id="chatForm" class="chat-form">
-              <input id="chatInput" maxlength="300" placeholder="Nhắn tin cho cộng đoàn…" autocomplete="off" aria-label="Tin nhắn">
-              <button class="primary" type="submit">Gửi</button>
-            </form>
-            <p id="chatError" class="chat-error" role="status"></p>
           </section>
         </section>
 
@@ -108,7 +107,7 @@
       <p id="gameError" class="error game-error" role="status"></p>
     </section>
 
-    <footer class="footer"><span>HÀNH TRÌNH 27</span><span>Một trò chơi cộng đồng</span></footer>
+    <footer class="footer"><span>HÀNH TRÌNH 27</span><span>Một trò chơi cộng đồng</span><button id="chatToggleButton" class="footer-chat-button" type="button" aria-label="Mở tin nhắn" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v11h-9l-5 3v-14Z"/><path d="M8 10h8M8 13.5h5"/></svg></button></footer>
   </main>
   <script type="module" src="/app.js"></script>
 </body>

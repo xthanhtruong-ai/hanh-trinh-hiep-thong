@@ -127,7 +127,7 @@ function publicState(room, playerId) {
     code: room.code, hostId: room.hostId, started: room.started, phase: room.phase,
     currentPlayerId: activePlayer(room)?.id || null, myId: playerId, players: room.players,
     board, properties: room.properties, assets: room.assets, dice: room.dice, rollSequence: room.rollSequence, log: room.log, chat: room.chat,
-    pendingTile: room.pendingTile, shortfall: room.shortfall, auction: room.auction, lastCard: room.lastCard,
+    pendingTile: room.pendingTile, shortfall: room.shortfall, lastCard: room.lastCard,
     winnerId: room.winnerId, extraTurn: room.extraTurn
   };
 }
@@ -147,7 +147,7 @@ function createRoom(name) {
   const assets = Object.fromEntries(board.filter(tile => tile.kind === 'railroad' || tile.kind === 'utility').map(tile => [tile.id, { benefactorId: null }]));
   const room = {
     code, hostId: playerId, players: [player], properties, assets, started: false, current: 0, phase: 'lobby',
-    pendingTile: null, shortfall: null, auction: null, dice: null, rollSequence: 0, doublesCount: 0, extraTurn: false, log: [], chat: [], lastCard: null, winnerId: null
+    pendingTile: null, shortfall: null, dice: null, rollSequence: 0, doublesCount: 0, extraTurn: false, log: [], chat: [], lastCard: null, winnerId: null
   };
   addLog(room, name + ' đã tạo phòng.');
   fundGrants(room, player, 1500, 'điểm khởi đầu sứ vụ');
@@ -203,23 +203,6 @@ function leaveRoom(code, playerId) {
   for (const state of Object.values(room.assets)) if (state.benefactorId === playerId) state.benefactorId = null;
   if (room.shortfall?.playerId === playerId) room.shortfall = null;
   else if (room.shortfall?.recipientId === playerId) room.shortfall.recipientId = null;
-
-  if (room.auction) {
-    if (wasCurrent) {
-      room.auction = null;
-      room.pendingTile = null;
-      room.phase = 'manage';
-    } else {
-      room.auction.bidders = room.auction.bidders.filter(id => id !== playerId);
-      room.auction.passed = room.auction.passed.filter(id => id !== playerId);
-      if (room.auction.leaderId === playerId) {
-        room.auction.leaderId = null;
-        room.auction.bid = 0;
-      }
-      if (room.auction.currentBidderId === playerId) room.auction.currentBidderId = null;
-      advanceAuction(room);
-    }
-  }
 
   if (room.hostId === playerId) room.hostId = alive(room)[0]?.id || null;
   addLog(room, player.name + ' đã rời phòng; các nơi họ đang đồng hành được trả lại cho cộng đoàn.');
@@ -355,65 +338,9 @@ function drawCard(room, player, deck) {
   if (room.phase !== 'shortfall') room.phase = 'manage';
 }
 
-function finishAuction(room) {
-  const auction = room.auction;
-  if (auction.leaderId && auction.bid > 0) {
-    const winner = room.players.find(player => player.id === auction.leaderId);
-    const tile = board[auction.tileIndex];
-    const state = tile.kind === 'property' ? room.properties[tile.id] : room.assets[tile.id];
-    state.benefactorId = winner.id;
-    if (tile.kind === 'property') state.level = 1;
-    winner.points -= auction.bid;
-    const target = tile.kind === 'property' ? dioceseTitle(tile.name) : tile.name;
-    fundReceives(room, winner, auction.bid, tile.kind === 'property' ? 'đóng góp xây nhà thờ đầu tiên tại ' + target : 'đóng góp để đồng hành cùng ' + target);
-    addLog(room, tile.kind === 'property'
-      ? winner.name + ' trở thành ân nhân và xây nhà thờ đầu tiên tại ' + target + '.'
-      : winner.name + ' trở thành ân nhân đồng hành cùng ' + target + '.');
-  } else addLog(room, 'Không có ai đề nghị đóng góp cho ô này.');
-  room.auction = null; room.pendingTile = null; room.phase = 'manage';
-}
-
-function advanceAuction(room) {
-  const auction = room.auction;
-  const eligible = auction.bidders.filter(id => !auction.passed.includes(id) && id !== auction.leaderId);
-  if (eligible.length === 0) { finishAuction(room); return; }
-  let chosen = null;
-  for (let offset = 0; offset < auction.bidders.length; offset++) {
-    const index = (auction.cursor + offset) % auction.bidders.length;
-    if (eligible.includes(auction.bidders[index])) {
-      chosen = auction.bidders[index]; auction.cursor = (index + 1) % auction.bidders.length; break;
-    }
-  }
-  auction.currentBidderId = chosen;
-}
-
-function beginAuction(room) {
-  room.auction = {
-    tileIndex: room.pendingTile,
-    bidders: alive(room).map(player => player.id),
-    passed: [], leaderId: null, bid: 0, currentBidderId: null, cursor: room.current
-  };
-  room.phase = 'auction';
-  advanceAuction(room);
-}
-
 function performAction(room, playerId, name, data) {
   const player = requirePlayer(room, playerId);
   if (!room.started) throw new Error('Ván chơi chưa bắt đầu.');
-  if (name === 'bid' || name === 'passBid') {
-    if (room.phase !== 'auction' || room.auction.currentBidderId !== playerId) throw new Error('Chưa đến lượt đấu giá của bạn.');
-    if (name === 'bid') {
-      const amount = Math.floor(Number(data.amount));
-      if (!Number.isFinite(amount) || amount < room.auction.bid + 10 || amount > player.points) throw new Error('Mức đóng góp phải cao hơn hiện tại ít nhất 10 điểm và không vượt quá số điểm sứ vụ của bạn.');
-      room.auction.bid = amount; room.auction.leaderId = player.id;
-      addLog(room, player.name + ' đề nghị mức đóng góp ' + points(amount) + '.');
-    } else {
-      room.auction.passed.push(player.id);
-      addLog(room, player.name + ' bỏ lượt đấu giá.');
-    }
-    advanceAuction(room);
-    return;
-  }
   requireTurn(room, playerId);
   if (name === 'roll') {
     if (room.phase !== 'roll') throw new Error('Bạn chưa thể gieo xúc xắc.');
@@ -474,8 +401,12 @@ function performAction(room, playerId, name, data) {
     return;
   }
   if (name === 'decline') {
-    if (room.phase !== 'contribute') throw new Error('Không có công trình nào đang chờ mời cộng đoàn đóng góp.');
-    beginAuction(room);
+    if (room.phase !== 'contribute' || room.pendingTile === null) throw new Error('Không có nơi nào đang chờ quyết định xây dựng.');
+    const tile = board[room.pendingTile];
+    addLog(room, tile.kind === 'property'
+      ? player.name + ' quyết định chưa xây nhà thờ tại ' + dioceseTitle(tile.name) + '.'
+      : player.name + ' quyết định chưa đóng góp tại ' + tile.name + '.');
+    room.phase = 'manage';
     return;
   }
   if (name === 'endTurn') {

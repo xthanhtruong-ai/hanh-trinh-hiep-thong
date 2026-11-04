@@ -71,7 +71,7 @@ Trạng thái phòng, người chơi, chat và nhật ký chỉ nằm trong bộ
 - Mỗi người bắt đầu với 1.500 điểm sứ vụ. Đi qua Khởi đầu sứ vụ nhận 200 điểm.
 - Chủ phòng tạo phòng; người khác vào bằng mã/link; cần ít nhất 2 người và tối đa 8 người; chủ phòng bắt đầu ván.
 - Mỗi lượt gieo hai xúc xắc. Gieo đôi cho lượt thêm; gieo đôi ba lần liên tiếp đưa người chơi vào kỳ tĩnh tâm.
-- Nếu một giáo phận chưa có ân nhân, người chơi có thể đóng góp theo giá đặt sẵn để trở thành ân nhân và xây nhà thờ đầu tiên, hoặc mời cộng đoàn đóng góp qua đấu giá. Người thắng đấu giá cũng dựng nhà thờ đầu tiên. Mức trả giá phải cao hơn mức hiện tại ít nhất 10 điểm và không vượt số điểm người chơi có.
+- Nếu một giáo phận chưa có ân nhân, người đến ô chọn đóng góp theo giá đặt sẵn để trở thành ân nhân và xây nhà thờ đầu tiên, hoặc bỏ qua. Không có đấu giá hay người chơi khác tham gia quyết định này.
 - Khi ghé giáo phận đã có ân nhân khác, người chơi là người đi lễ và đóng góp điểm sứ vụ cho việc duy tu, sửa chữa nhà thờ. Mức đóng góp tăng theo số nhà thờ tại giáo phận đó và được chuyển cho ân nhân.
 - Mỗi lần ân nhân dừng tại giáo phận mình đồng hành, họ có thể xây tối đa một nhà thờ bổ sung. Luật xây thêm giữ điều kiện nhóm màu và phát triển cân bằng như cờ tỷ phú; tối đa 5 nhà thờ tại mỗi giáo phận. Có thể thu gọn theo thứ tự và nhận lại một phần điểm.
 - Khi giáo phận còn một nhà thờ, ân nhân có thể rút lại đóng góp tại đó, nhận 50% giá ban đầu và không còn là ân nhân. Không thể rút nếu nhà thờ ở giáo phận khác trong nhóm màu vẫn đang được mở rộng.
@@ -79,13 +79,15 @@ Trạng thái phòng, người chơi, chat và nhật ký chỉ nằm trong bộ
 - Nếu không đủ điểm thanh toán, người chơi vào pha thiếu điểm. Có thể bổ sung điểm, rút đóng góp đủ điều kiện, thu gọn nhà thờ hoặc rút khỏi hành trình.
 - Khi rút khỏi hành trình do thiếu điểm, số điểm còn lại chuyển cho người nhận hợp lệ hoặc Quỹ. Các nơi họ đồng hành chuyển cho người nhận hợp lệ; nếu không có thì trở về cộng đoàn.
 - Rời phòng khi ván đang diễn ra đánh dấu người chơi đã rời, đưa điểm còn lại về Quỹ, trả nơi họ đồng hành về cộng đoàn và có thể kết thúc ván nếu chỉ còn một người chơi.
-- Desktop: bàn cờ chiếm khoảng 50% chiều ngang, cột thông báo/chat và cột người chơi mỗi cột chiếm khoảng 25%. Trên điện thoại, giao diện xếp dọc và bàn cờ dùng gần hết chiều ngang.
-- Danh sách người chơi mở sẵn khi bắt đầu ván và thu gọn bằng mũi tên; hiển thị tên, avatar minh họa, điểm sứ vụ và giáo phận cùng số nhà thờ mỗi ân nhân đã dựng. Thông báo hiện tại và lịch sử cùng nằm trong một thẻ có thể mở/thu; chat trực tiếp nằm phía dưới.
+- Giao diện theo demo tham khảo dùng nền xanh than, chữ kem, vàng làm màu nhấn và font WOFF2 cục bộ trong `public/assets/fonts/`.
+- Desktop: vùng chơi chia map/cột thông tin theo tỉ lệ 6:4. Cột thông tin có thông báo ở trên và danh sách người chơi bên dưới. Trên điện thoại, giao diện xếp dọc và bàn cờ dùng gần hết chiều ngang.
+- Danh sách người chơi mở sẵn trong cột phải, có thể thu gọn bằng mũi tên; hiển thị tên, avatar minh họa, điểm sứ vụ và giáo phận cùng số nhà thờ mỗi ân nhân đã dựng. Thông báo hiện tại và lịch sử cùng nằm trong thẻ trên đầu cột; nhấn mũi tên để mở lịch sử.
+- Footer có biểu tượng tin nhắn. Khi nhấn, chat mở thành sidebar bên phải phủ lên vùng danh sách người chơi; nút Đóng ở cuối panel hoặc phím Escape để đóng.
 - Header trong phòng hiển thị mã phòng, nút sao chép mã/link và rời phòng; trên điện thoại các hành động này nằm trong menu. Lobby dùng hộp thoại cao hơn, hiển thị chủ phòng cùng avatar và tên, các chỗ trống, mã/link và nút bắt đầu.
 - Nhấn xúc xắc trên bàn để gieo; thao tác xây dựng/đóng góp hiện giữa khu vực trung tâm bàn. Quân cờ đang di chuyển được phóng nhẹ và làm nổi bật ô hiện tại.
-- Ô chức năng có dấu “!” để xem giải thích. Có nút riêng để sao chép mã phòng và link mời.
+- Bàn cờ xếp thành hình chữ nhật theo sơ đồ mẫu: 11 ô trên, 11 ô dưới, 12 ô trái và 11 ô phải; góc bàn rộng hơn ô cạnh. Kích thước desktop tối đa của `#board.board` hiện là 553.506 × 486.767 px (giảm 25% so với kích thước trước); trên màn hình hẹp, bàn co theo chiều ngang và giữ nguyên tỉ lệ. Các ô chia thành ba phần theo tỉ lệ 2:3:5; quân người chơi nằm trong phần đầu. Ô trên/dưới xếp phần theo chiều dọc, ô trái/phải xếp theo chiều ngang. Rê chuột lên ô chức năng hoặc đưa tiêu điểm bàn phím vào ô để xem tooltip, không có nút “!”. Có nút riêng để sao chép mã phòng và link mời.
 
-Các trạng thái chính ở server gồm `lobby`, `roll`, `contribute`, `auction`, `manage`, `shortfall`, `finished`. API state gửi kèm `currentPlayerId`, `auction` và `shortfall`; phần UI có thể dùng `auction.currentBidderId` để chỉ người trả giá hiện tại.
+Các trạng thái chính ở server gồm `lobby`, `roll`, `contribute`, `manage`, `shortfall`, `finished`. API state gửi kèm `currentPlayerId` và `shortfall`. Khi người chơi đến giáo phận chưa có ân nhân, họ tự chọn xây nhà thờ đầu tiên theo mức đóng góp cố định hoặc bỏ qua.
 
 ## 6. Trạng thái repo khi bàn giao
 
@@ -101,9 +103,7 @@ Tại thời điểm tạo tài liệu:
 
 ## 7. Kết quả kiểm thử thủ công gần nhất
 
-Ngày 02/11/2026, đã chơi một phiên bằng hai tab trình duyệt local với hai người thử. Đã đi qua tạo phòng, tham gia, bắt đầu, gieo xúc xắc, đóng góp tại giáo phận/tuyến, đấu giá (một người trả 190, người kia tăng lên 200, người đầu nhường), cập nhật danh sách ân nhân, thẻ cấp điểm, nhận điểm khi qua Khởi đầu, gieo đôi thêm lượt, thanh toán 25 điểm trực tiếp cho ân nhân và rời phòng. Khi B rời, A được tuyên bố thắng; danh sách của B được cập nhật về 0 điểm/0 nơi đồng hành. Hai tab nhận trạng thái và nhật ký chung. Không thấy lỗi console JavaScript hoặc thông báo lỗi trong game.
-
-> Nhãn và highlight người chơi trong pha đấu giá đã được cập nhật theo `auction.currentBidderId` trong giao diện mới.
+Ngày 02/11/2026, đã chơi một phiên bằng hai tab trình duyệt local với hai người thử. Phiên thử đó dùng luật cũ, có đấu giá: một người trả 190, người kia tăng lên 200, người đầu nhường. Cơ chế đấu giá sau đó đã được gỡ bỏ theo luật hiện hành. Phiên thử cũng đã đi qua tạo phòng, tham gia, bắt đầu, gieo xúc xắc, đóng góp tại giáo phận/tuyến, cập nhật danh sách ân nhân, thẻ cấp điểm, nhận điểm khi qua Khởi đầu, gieo đôi thêm lượt, thanh toán 25 điểm trực tiếp cho ân nhân và rời phòng. Khi B rời, A được tuyên bố thắng; danh sách của B được cập nhật về 0 điểm/0 nơi đồng hành. Hai tab nhận trạng thái và nhật ký chung. Không thấy lỗi console JavaScript hoặc thông báo lỗi trong game.
 
 > Ván thử kết thúc qua nút **Rời phòng**, không phải qua thiếu điểm/phá sản. Các nhánh thiếu điểm, phá sản bình thường, nâng cấp đủ cả nhóm, ba lần gieo đôi và thời hạn kỳ tĩnh tâm chưa được kiểm tra đầy đủ. Chức năng clipboard và tooltip trên kích thước màn hình nhỏ cũng cần kiểm tra thêm.
 
