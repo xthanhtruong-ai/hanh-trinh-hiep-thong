@@ -3,22 +3,30 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b1723">
-  <title>Hành Trình 27 · Cờ tỷ phú</title>
+  <meta name="theme-color" content="#211412">
+  <title>HÀNH TRÌNH TRUYỀN GIÁO</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main class="app-shell">
     <header class="topbar">
       <a class="brand" href="/" aria-label="Hành Trình 27">
-        <span class="brand-mark">✦</span>
-        <span><strong>HÀNH TRÌNH <em>27</em></strong><small>Vòng quanh các giáo phận Việt Nam</small></span>
+        <span class="brand-mark"><img src="/assets/header-logo.png?v=20261103" alt="" width="1254" height="1254"></span>
+        <span><strong>HÀNH TRÌNH TRUYỀN GIÁO <em>27</em></strong><small>Vòng quanh các giáo phận Việt Nam</small></span>
       </a>
-      <div id="connection" class="connection"><i></i> Chưa vào phòng</div>
+      <div class="topbar-room-actions">
+        <div id="connection" class="connection"><i></i> Chưa vào phòng</div>
+        <div class="room-actions">
+          <div class="room-share"><span>MÃ PHÒNG</span><strong id="roomCodeLabel">------</strong><button id="copyCode" class="secondary">Sao chép mã</button><button id="copyLink" class="secondary">Sao chép liên kết</button></div>
+          <button id="leaveRoom" class="danger">Rời phòng</button>
+        </div>
+      </div>
+      <button id="mobileMenuToggle" class="mobile-menu-toggle" type="button" aria-label="Mở menu phòng" aria-expanded="false">☰</button>
     </header>
 
     <section id="lobby" class="lobby">
       <div class="hero">
+        <img class="hero-brand-image" src="/assets/brand-logo.png?v=20261103" alt="Biểu trưng Hiệp Hành" width="1536" height="1024" fetchpriority="high">
         <span class="eyebrow">CÙNG GIEO XÚC XẮC · CÙNG KHÁM PHÁ</span>
         <h1>Một vòng quanh <span>27 giáo phận</span></h1>
         <p>Gặp gỡ, xây dựng và kết nối qua một bàn cờ tỷ phú trực tuyến.</p>
@@ -32,37 +40,69 @@
         <div class="join-row"><input id="roomCode" maxlength="6" placeholder="MÃ PHÒNG" autocomplete="off"><button id="joinRoom" class="secondary">Tham gia</button></div>
         <p id="lobbyError" class="error" role="status"></p>
       </div>
-      <div class="lobby-foot">Luật mua bán, tiền thuê, xúc xắc, nhà và khách sạn theo lối chơi Cờ tỷ phú quen thuộc.</div>
+      <div class="lobby-foot">Cùng đồng hành với các giáo phận, mở rộng hoạt động mục vụ và kết nối cộng đoàn.</div>
     </section>
 
     <section id="game" class="game hidden">
-      <div class="game-heading">
-        <div><span class="eyebrow">PHÒNG TRỰC TUYẾN</span><h2 id="gameTitle">Bàn chơi</h2></div>
-        <div class="room-share"><span>MÃ PHÒNG</span><strong id="roomCodeLabel">------</strong><button id="copyRoom" title="Sao chép liên kết">⧉</button></div>
-      </div>
-
       <div class="game-layout">
-        <div class="board-wrap">
-          <div id="board" class="board" aria-label="Bàn cờ 45 ô">
-            <div id="side-top" class="side side-top"></div>
-            <div id="side-right" class="side side-right"></div>
-            <div id="side-bottom" class="side side-bottom"></div>
-            <div id="side-left" class="side side-left"></div>
-            <section class="board-center">
-              <div class="center-sun">✦</div>
-              <p class="eyebrow">HÀNH TRÌNH</p>
-              <h3>27 giáo phận</h3>
-              <div class="dice-box"><span id="dieOne">⚀</span><span id="dieTwo">⚀</span></div>
-              <p id="turnStatus" class="turn-status">Chờ người chơi…</p>
-              <div id="actionPanel" class="action-panel"></div>
-            </section>
+        <div class="board-column">
+          <div class="board-wrap">
+            <div id="board" class="board" aria-label="Bàn cờ 45 ô">
+              <div id="side-top" class="side side-top"></div>
+              <div id="side-right" class="side side-right"></div>
+              <div id="side-bottom" class="side side-bottom"></div>
+              <div id="side-left" class="side side-left"></div>
+              <section class="board-center">
+                <div class="center-sun"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="/assets/game-icons.svg#cross-sun"></use></svg></div>
+                <p class="eyebrow">HÀNH TRÌNH TRUYỀN GIÁO</p>
+                <h3>27 giáo phận</h3>
+                <button id="rollDice" class="dice-box" type="button" aria-label="Gieo xúc xắc" title="Chỉ người đến lượt mới có thể gieo">
+                  <span id="dieOne" class="die-face" data-value="1" aria-hidden="true"><img src="/assets/dice/faces/face-1.webp" alt=""></span><span id="dieTwo" class="die-face" data-value="1" aria-hidden="true"><img src="/assets/dice/faces/face-1.webp" alt=""></span>
+                </button>
+                <div id="diceTotal" class="dice-total" aria-live="polite" aria-atomic="true"></div>
+                <p id="turnStatus" class="turn-status">Chờ người chơi…</p>
+                <div id="actionDialog" class="action-dialog hidden" aria-live="polite"><section id="actionDialogContent" class="action-dialog-card"></section></div>
+              </section>
+            </div>
           </div>
         </div>
 
-        <aside class="sidebar">
-          <section class="panel players-panel"><div class="panel-title"><h3>Người chơi</h3><span id="playerCount">0/8</span></div><div id="players" class="players"></div><button id="startGame" class="primary full hidden">Bắt đầu ván</button></section>
-          <section class="panel"><div class="panel-title"><h3>Sự kiện</h3><span class="live-pill">LIVE</span></div><div id="eventLog" class="event-log"></div></section>
-          <p class="rules-note">Chủ phòng hãy mời ít nhất một người nữa bằng mã phòng. Mỗi lượt chỉ người đang đến lượt mới gieo xúc xắc.</p>
+        <section class="activity-column">
+          <section id="eventPanel" class="panel event-panel" aria-labelledby="eventsTitle">
+            <div class="activity-current">
+              <div class="activity-current-copy"><span id="eventsTitle">THÔNG BÁO HIỆN TẠI</span><p id="actionPanel" aria-live="polite">Đang chờ cộng đoàn tham gia phòng.</p></div>
+              <button id="eventsMenuButton" class="panel-collapse-button" type="button" aria-label="Mở lịch sử hoạt động" aria-expanded="false"><i id="eventsArrow" class="fa-solid fa-sort-down" aria-hidden="true"></i></button>
+            </div>
+            <div class="activity-history-label"><span>LỊCH SỬ HOẠT ĐỘNG</span><b id="eventsMenuCount">0</b></div>
+            <div id="eventLog" class="event-log"></div>
+          </section>
+
+          <section class="chat-panel panel" aria-labelledby="chatTitle">
+            <div class="chat-header"><h3 id="chatTitle">Tin nhắn giữa người chơi</h3><span>💬</span></div>
+            <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
+            <form id="chatForm" class="chat-form">
+              <input id="chatInput" maxlength="300" placeholder="Nhắn tin cho cộng đoàn…" autocomplete="off" aria-label="Tin nhắn">
+              <button class="primary" type="submit">Gửi</button>
+            </form>
+            <p id="chatError" class="chat-error" role="status"></p>
+          </section>
+        </section>
+
+        <aside class="players-column">
+          <section class="players-strip panel" aria-labelledby="playersTitle">
+            <div class="panel-title">
+              <h3 id="playersTitle">Cộng đoàn người chơi</h3>
+              <span id="playerCount">0/8</span>
+              <button id="playersMenuButton" class="panel-collapse-button" type="button" aria-label="Thu gọn danh sách người chơi" aria-expanded="true"><i id="playersArrow" class="fa-solid fa-sort-down" aria-hidden="true"></i></button>
+            </div>
+            <div id="players" class="player-cards"></div>
+            <div id="openSlots" class="open-slots" aria-hidden="true"></div>
+            <div class="lobby-room-footer">
+              <div class="lobby-room-code"><span>MÃ PHÒNG</span><strong id="lobbyRoomCode">------</strong><button id="lobbyCopyCode" type="button" aria-label="Sao chép mã phòng">Sao chép mã</button></div>
+              <button id="lobbyCopyLink" class="secondary" type="button">Sao chép liên kết</button>
+              <button id="startGame" class="primary start-button hidden">Bắt đầu sứ vụ</button>
+            </div>
+          </section>
         </aside>
       </div>
       <p id="gameError" class="error game-error" role="status"></p>

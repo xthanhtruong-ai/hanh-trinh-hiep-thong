@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <symbol id="cross-sun" viewBox="0 0 64 64">
+    <g fill="none" stroke="#6b3828" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M32 4v8M32 52v8M4 32h8M52 32h8M12.2 12.2l5.7 5.7m28.2 28.2 5.7 5.7m0-39.6-5.7 5.7M17.9 46.1l-5.7 5.7" stroke="#e8a83b" stroke-width="4"/>
+      <path d="M32 15v34M22 25h20" stroke="#6b3828" stroke-width="7"/>
+      <path d="M32 15v34M22 25h20" stroke="#f5c65d" stroke-width="4"/>
+    </g>
+    <circle cx="32" cy="32" r="4" fill="#fff1ce"/>
+  </symbol>
+
+  <symbol id="church" viewBox="0 0 64 64">
+    <path d="M7 29 32 12l25 17v29H7z" fill="#f7e5c1" stroke="#573326" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M24 17V8h16v9M32 3v16M27 9h10" fill="none" stroke="#6b3828" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M5 29 32 10l27 19" fill="none" stroke="#d48655" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M26 58V43a6 6 0 0 1 12 0v15" fill="#c97855" stroke="#573326" stroke-width="3"/>
+    <path d="M13 34h9v10h-9zm29 0h9v10h-9z" fill="#f2ba4e" stroke="#573326" stroke-width="2"/>
+    <path d="M3 58h58" stroke="#6b3828" stroke-width="4" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="charity" viewBox="0 0 64 64">
+    <path d="m10 25 22-15 22 15-4 33H14z" fill="#df9f4d" stroke="#573326" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M10 25h44l-3 10H13z" fill="#f4ca66" stroke="#573326" stroke-width="3"/>
+    <path d="M26 58V40a6 6 0 0 1 12 0v18" fill="#f7e5c1" stroke="#573326" stroke-width="3"/>
+    <path d="M32 18c-4-6-13 0 0 11 13-11 4-17 0-11Z" fill="#e98887" stroke="#713e37" stroke-width="2"/>
+  </symbol>
+
+  <symbol id="event-card" viewBox="0 0 64 64">
+    <path d="M17 8h32v46H17z" fill="#fff1d0" stroke="#573326" stroke-width="3"/>
+    <path d="M12 13h32v46H12z" fill="#f4bd50" stroke="#573326" stroke-width="3"/>
+    <path d="m28 22 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2-4.5-4.4 6.2-.9z" fill="#fff4db" stroke="#79462e" stroke-width="2" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="mission-coin" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="24" fill="#f5c454" stroke="#6b3828" stroke-width="4"/>
+    <circle cx="32" cy="32" r="17" fill="#ffe6a0" stroke="#d28b39" stroke-width="2"/>
+    <path d="M32 20v24M25 25h12M25 32h12M25 39h12" stroke="#72412c" stroke-width="3" stroke-linecap="round"/>
+    <path d="M7 18 12 12m40 40 5-6" stroke="#fff1ce" stroke-width="3" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="pilgrim-route" viewBox="0 0 64 64">
+    <path d="M12 51c8-2 5-12 14-14s7 9 15 7 6-12 13-14" fill="none" stroke="#a7603c" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 7"/>
+    <path d="M29 8h14v9H29zM32 4h8v4h-8z" fill="#f4c454" stroke="#573326" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M36 17v11m-8-4 8-7 8 7" fill="none" stroke="#573326" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M9 52h13l-2 6H12z" fill="#df9679" stroke="#573326" stroke-width="2"/>
+  </symbol>
+
+  <symbol id="mission-center" viewBox="0 0 64 64">
+    <path d="M6 26 32 11l26 15v5H6z" fill="#e9b250" stroke="#573326" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M12 32h40v24H12z" fill="#f7e5c1" stroke="#573326" stroke-width="3"/>
+    <path d="M27 39h10v17H27zM17 37h6v7h-6zm24 0h6v7h-6z" fill="#d98263" stroke="#573326" stroke-width="2"/>
+    <path d="M32 5v9m-4-5h8" stroke="#6b3828" stroke-width="3" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="sanctuary" viewBox="0 0 64 64">
+    <path d="M9 28 32 12l23 16v29H9z" fill="#ead9bb" stroke="#573326" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M32 4v14m-6-8h12" stroke="#6b3828" stroke-width="3" stroke-linecap="round"/>
+    <path d="M21 57V40a11 11 0 0 1 22 0v17" fill="#9b6047" stroke="#573326" stroke-width="3"/>
+    <path d="M26 42c0-4 3-7 6-7s6 3 6 7" fill="none" stroke="#f3c45d" stroke-width="3"/>
+    <circle cx="32" cy="28" r="3" fill="#f3c45d"/>
+  </symbol>
+
+  <symbol id="retreat" viewBox="0 0 64 64">
+    <path d="M12 56V26L32 9l20 17v30z" fill="#e8d9bf" stroke="#573326" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M25 56V39a7 7 0 0 1 14 0v17" fill="#ad704d" stroke="#573326" stroke-width="3"/>
+    <path d="M32 14v13m-5-8h10" stroke="#f0b94e" stroke-width="3" stroke-linecap="round"/>
+    <path d="M5 56h54" stroke="#573326" stroke-width="4" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="community" viewBox="0 0 64 64">
+    <path d="M9 42c6-8 14-8 23 0-5 8-18 10-23 0Zm23 1c7-10 16-11 25-4-4 10-17 14-25 4Z" fill="#8bb879" stroke="#52603d" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M30 43c1-11 3-20 9-29m-8 24c-5-7-9-11-16-13m22 4c5-6 9-8 15-8" fill="none" stroke="#6b7b45" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="39" cy="13" r="5" fill="#efbd5d" stroke="#6b3828" stroke-width="2"/>
+  </symbol>
+</svg>
