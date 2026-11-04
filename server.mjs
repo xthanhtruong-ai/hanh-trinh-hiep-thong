@@ -63,7 +63,7 @@ const board = [
 ].map((tile, index) => {
   if (tile.kind !== 'property') return { ...tile, index, id: tile.kind + '-' + index };
   const details = propertyById[tile.propertyId];
-  return { ...details, kind: 'property', index, id: tile.propertyId, icon: '⛪' };
+  return { ...details, kind: 'property', index, id: tile.propertyId, propertyId: tile.propertyId, icon: '⛪' };
 });
 
 const colors = ['#e8ad45', '#dd806e', '#88a77c', '#759f95', '#c99265', '#c17d91', '#d2bc79', '#9a7c9f'];
@@ -287,8 +287,10 @@ function movePlayer(room, player, steps) {
 }
 
 function propertyRent(room, tile) {
-  const details = propertyById[tile.propertyId];
-  const state = room.properties[tile.propertyId];
+  const propertyId = tile.propertyId || tile.id;
+  const details = propertyById[propertyId];
+  const state = room.properties[propertyId];
+  if (!details || !state) throw new Error('Không tìm thấy dữ liệu giáo phận để tính khoản duy tu.');
   const churchCount = Math.max(1, Math.min(state.level, details.rent.length - 1));
   return details.rent[churchCount];
 }
@@ -487,7 +489,7 @@ function performAction(room, playerId, name, data) {
   if (name === 'buildChurch') {
     if (room.phase !== 'manage' || room.pendingTile === null || room.pendingTile !== player.position) throw new Error('Bạn chỉ có thể xây thêm nhà thờ khi ghé ô giáo phận đang đồng hành.');
     const tile = board[room.pendingTile];
-    const details = tile?.kind === 'property' ? propertyById[tile.propertyId] : null;
+    const details = tile?.kind === 'property' ? propertyById[tile.propertyId || tile.id] : null;
     const state = details ? room.properties[details.id] : null;
     if (!details || !state || state.benefactorId !== player.id) throw new Error('Bạn cần là ân nhân tại giáo phận này để xây thêm nhà thờ.');
     const group = groupById[details.groupId];

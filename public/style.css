@@ -3855,3 +3855,105 @@ input:focus {
   border-color: transparent;
   box-shadow: none;
 }
+
+/* Top and bottom board tiles are split into color, icon, and details (2:4:4). */
+.tile-color-band {
+  display: block;
+  min-width: 0;
+  flex: 2 1 0;
+  align-self: stretch;
+  position: relative;
+  z-index: 1;
+  background: var(--tile-color, transparent);
+}
+
+.tile-top,
+.tile-bottom {
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 0;
+  padding: 2px;
+  text-align: center;
+}
+
+.tile-top::before,
+.tile-bottom::before {
+  display: none;
+}
+
+.tile-top .tile-color-band,
+.tile-bottom .tile-color-band {
+  flex: 2 1 0;
+}
+
+.tile-top .tile-icon,
+.tile-bottom .tile-icon {
+  display: grid;
+  min-width: 0;
+  flex: 4 1 0;
+  align-self: stretch;
+  place-items: center;
+  font-size: clamp(9px, 2cqw, 16px);
+}
+
+.tile-top .tile-icon .asset-icon,
+.tile-bottom .tile-icon .asset-icon {
+  width: 1.45em;
+  height: 1.45em;
+}
+
+.tile-top .tile-content,
+.tile-bottom .tile-content {
+  display: flex;
+  min-width: 0;
+  flex: 4 1 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  overflow: hidden;
+  text-align: center;
+}
+
+.tile-top .tile-name,
+.tile-bottom .tile-name {
+  display: -webkit-box;
+  max-width: 100%;
+  overflow: hidden;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.tile-top .tile-content > small,
+.tile-bottom .tile-content > small {
+  display: block;
+  white-space: nowrap;
+  font-size: .78em;
+}
+
+.tile-top .tile-content .house-count,
+.tile-bottom .tile-content .house-count {
+  font-size: clamp(8px, 1.1cqw, 10px);
+}
+
+.tile-top .tile-color-band,
+.tile-bottom .tile-color-band,
+.tile-left .tile-color-band,
+.tile-right .tile-color-band {
+  border-radius: 2px;
+}
+
+.tile-left .tile-color-band,
+.tile-right .tile-color-band {
+  display: none;
+}
+
+.tile-top .benefactor-marker,
+.tile-bottom .benefactor-marker {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  margin: 0;
+}

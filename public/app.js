@@ -253,7 +253,7 @@ function renderBoard() {
       if (movingPlayers.has(focusedPlayerId) && focusPosition === tile.index) element.classList.add('is-focus');
       const playersHere = state.players.filter(player => !player.bankrupt && (displayedPositions.get(player.id) ?? player.position) === tile.index).map(player => '<i class="token-dot' + (movingPlayers.has(player.id) ? ' moving' : '') + (player.id === focusedPlayerId ? ' focused' : '') + '" style="--player-color:' + player.color + '" title="' + escapeHtml(player.name) + '">' + escapeHtml(player.name.slice(0, 1).toUpperCase()) + '</i>').join('');
       const help = tile.kind === 'property' ? '' : '<button class="tile-help" type="button" aria-label="Giải thích ô ' + escapeHtml(title) + '" aria-describedby="tile-help-' + tile.index + '">!</button><span class="tile-tooltip" id="tile-help-' + tile.index + '" role="tooltip">' + escapeHtml(tileHelpText(tile)) + '</span>';
-      element.innerHTML = '<span class="tile-icon">' + assetIcon(tileIcons[tile.kind] || 'church') + '</span><span class="tile-content"><span class="tile-name">' + escapeHtml(title) + '</span>' + stateLine + level + '</span>' + help + benefactorMarker + '<span class="tokens">' + playersHere + '</span>';
+      element.innerHTML = '<span class="tile-color-band" aria-hidden="true"></span><span class="tile-icon">' + assetIcon(tileIcons[tile.kind] || 'church') + '</span><span class="tile-content"><span class="tile-name">' + escapeHtml(title) + '</span>' + stateLine + level + '</span>' + help + benefactorMarker + '<span class="tokens">' + playersHere + '</span>';
       if (tile.kind !== 'property') {
         const helpButton = element.querySelector('.tile-help');
         const tooltip = element.querySelector('.tile-tooltip');
